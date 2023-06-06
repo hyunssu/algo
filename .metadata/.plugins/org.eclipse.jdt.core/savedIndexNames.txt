@@ -1,0 +1,2 @@
+INDEX VERSION 1.131+C:\Users\user\Desktop\algo\.metadata\.plugins\org.eclipse.jdt.core
+3823697542.index

@@ -1,0 +1,122 @@
+package 백준;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class BOJ_9328번_열쇠 {
+	
+	static int test, row, col, ans;
+	
+	static int[] dr = {-1, 0, 1, 0};
+	static int[] dc = {0, -1, 0, 1};
+	
+	static int[][] map;
+	static boolean[][] visited;
+	
+	static Queue<int[]>  queue;
+	static HashMap<Integer, Boolean> hash;
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		test = Integer.parseInt(br.readLine());
+		for(int t = 0; t < test; t++) 
+		{
+			
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			row = Integer.parseInt(st.nextToken());
+			col = Integer.parseInt(st.nextToken());
+			ans = 0;
+			map = new int[row+2][col+2];
+			visited = new boolean[row+2][col+2];
+			for(int c = 0; c < col + 2; c++) {
+				map[0][c] = map[row+1][c] = -2;
+			}
+			for(int r = 0; r < row + 2; r++) {
+				map[r][0] = map[r][col+1] = -2;
+			}
+			
+			for(int r = 1; r <= row; r++) {
+				String str = br.readLine();
+				for(int c = 1; c <= col; c++) {
+					map[r][c] = str.charAt(c-1) - '0';						
+				}
+			}
+			
+			bfs();
+			if(queue.isEmpty()) {
+				System.out.println(ans);
+			} else {
+				bfs2();
+			}
+			System.out.println('a' - '0');
+			System.out.println('z' - '0');
+			System.out.println('A' - '0');
+			System.out.println('Z' - '0');
+			System.out.println('.' - '0');
+			System.out.println('*' - '0');
+			System.out.println('$' - '0');
+			br.readLine();
+			// bfs로 모든 영역을 검사하는데?
+			// 만약 문을 만나고 문을 열지 못한다면 일단 대기해야 하기 떄문에, 대기열 큐에 추가한다.
+			// bfs를 1번 끝낸 후에, 대기열 큐를 확인하고, 대기열 큐로 다시 한 번 bfs를 한다.
+			// 다시 한번 대기열 큐를 확인하는데?
+			// boolean 값을 하나 적용해서 하나라도 문을 열 수 있다면,
+			// boolean 값이 false가 될때까지 bfs를 진행한다.
+			for(int r = 0; r <= row+1; r++) {
+				System.out.println(Arrays.toString(map[r]));
+			}
+			
+			
+			
+		}
+	}
+
+	private static void bfs2() {
+		Queue<int[]> q = new LinkedList<int[]>();
+		int size = queue.size();
+		for(int s = 0; s < size; s++) {
+			int[] temp = queue.poll();
+			q.add(new int[] {temp[0], temp[1]});
+			queue.add(temp);
+		}
+		
+	}
+
+	private static void bfs() {
+		Queue<int[]> q = new LinkedList<int[]>();
+		q.add(new int[] {0, 0});
+		visited[0][0] = true;
+		
+		while(!q.isEmpty()) {
+			int[] temp = q.poll();
+			for(int d = 0; d < 4; d++) {
+				int nr = temp[0] + dr[d];
+				int nc = temp[1] + dc[d];
+				if(nr < 0 || nc < 0 || nr >= row + 2 || nc >= col + 2 || visited[nr][nc] || map[nr][nc] == -6) continue;
+				visited[nr][nc] = true;
+				if(map[nr][nc] == -2) {
+					q.add(new int[] {nr, nc});
+				} else if(map[nr][nc] == -12) {
+					map[nr][nc] = -2;
+					ans++;
+				} else if(map[nr][nc] >= 17 && map[nr][nc] <= 42) {
+					if(hash.containsKey(map[nr][nc]+32)) {
+						map[nr][nc] = -2;
+						q.add(new int[] {nr, nc});
+					} else {
+						queue.add(new int[] {nr, nc});
+					}
+				} else if(map[nr][nc] >= 49 && map[nr][nc] <= 74) {
+					hash.put(map[nr][nc], true);
+					map[nr][nc] = -2;
+					q.add(new int[] {nr, nc});
+				}
+			}
+		}
+	}
+}

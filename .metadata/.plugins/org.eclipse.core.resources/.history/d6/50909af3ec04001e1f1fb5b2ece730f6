@@ -1,0 +1,89 @@
+package น้มุ;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+public class BOJ_9252น๘_LCS_2 {
+	
+	public static void main(String[] args) throws IOException {
+		
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		String str1 = br.readLine();
+		String str2 = br.readLine();
+		
+		int len1 = str1.length();
+		int len2 = str2.length();
+		int[][] dp = new int[len1][len2];
+		
+		boolean bo = false;
+		for(int c = 0; c < len2; c++) {
+			if (bo) {
+				dp[0][c] = 1;
+			} else if (str1.charAt(0) == str2.charAt(c)) {
+				bo = true;
+				dp[0][c] = 1;
+			}
+			
+		}
+		
+		bo = false;
+		for(int r = 0; r < len1; r++) {
+			if (bo) {
+				dp[r][0] = 1;
+			} else if (str2.charAt(0) == str1.charAt(r)) {
+				bo = true;
+				dp[r][0] = 1;
+			}
+		}
+		
+		
+		
+		for(int r = 1; r < len1; r++) {
+			for(int c = 1; c < len2; c++) {
+				if(str1.charAt(r) == str2.charAt(c)) {
+					dp[r][c] = dp[r-1][c-1] + 1;
+				} else {
+					dp[r][c] = Math.max(dp[r-1][c], dp[r][c-1]);
+					
+				}
+			}
+		}
+		
+		for(int r = 0; r < len1; r++) {
+			for(int c = 0; c < len2; c++) {
+				System.out.print(dp[r][c] + " ");
+			}
+			System.out.println();
+		}
+		
+		String ans = "";
+		int res = dp[len1-1][len2-1];
+		int cnt = res;
+		
+		for(int r = len1-1; r >= 0; r--) {
+			for(int c = len2-1; c >= 0; c--) {
+				if(dp[r][c] == cnt) {
+					if(str1.charAt(r) == str2.charAt(c)) {
+						ans += str1.charAt(r);
+						cnt--;
+						break;
+					}
+				} else if(dp[r][c] > cnt) { 
+					continue;
+				}
+				else {
+					break;
+				}
+			}
+			if(cnt == 0) break;
+		}
+		System.out.println(res);
+		if(res > 0) {
+			for(int i = res-1; i >= 0; i--) {
+				System.out.print(ans.charAt(i));				
+			}
+		}
+		
+	}
+}

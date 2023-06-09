@@ -1,0 +1,36 @@
+package 백준;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
+
+public class BOJ_15717번_떡파이어 {
+
+	static int N, S;
+	
+	static long[] arr;
+	
+	static List<Long> left = new ArrayList<Long>();
+	static List<Long> right = new ArrayList<Long>();
+	
+	public static void main(String[] args) throws IOException {
+		
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		S = Integer.parseInt(st.nextToken());
+		
+		arr = new long[N];
+		st = new StringTokenizer(br.readLine());
+		for(int i = 0; i < N; i++)
+			arr[i] = Long.parseLong(st.nextToken());
+		
+		
+		
+	}
+
+}
